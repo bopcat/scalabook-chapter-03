@@ -62,6 +62,32 @@ object App {
     } catch {
       case e: Exception => println("Can't remove elements from Nil!")
     }
+
+    println()
+    println("ex3_7:")
+    println(List.product(List(1.0, 2.0, 0.0, 3.0, 4.0)))
+
+    println()
+    println("ex3_8:")
+    println(List.foldRight(List(1, 2, 3), Nil: List[Int])(Cons(_, _)))
+
+    println()
+    println("ex3_9:")
+    println(List.length(List(1, 2, 3)))
+    println(List.length(Nil))
+
+    println()
+    println("ex3_11:")
+    println(List.lengthViaFoldLeft(List(1, 2, 3)))
+    println(List.lengthViaFoldLeft(Nil))
+    println(List.sumViaFoldLeft(List(1, 2, 3)))
+    println(List.sumViaFoldLeft(Nil))
+    println(List.productViaFoldLeft(List(1, 2, 3)))
+    println(List.productViaFoldLeft(Nil))
+
+    println()
+    println("ex3_12:")
+    println(List.reverse(List(1, 2, 3)))
   }
 
   // should be 3...

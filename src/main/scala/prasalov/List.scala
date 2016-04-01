@@ -47,22 +47,49 @@ object List {
     case Cons(h, t) => Cons(h, append(t, bs))
   }
 
-  def init[A](l: List[A]): Option[List[A]] = l match {
-    case Nil => None
-    case Cons(h, t) => optionalCons(h, init(t))
-  }
-  /*{
+  def init[A](l: List[A]): Option[List[A]] = {
     @tailrec def _init[A](res: List[A], as: List[A]): Option[List[A]] = (res, as) match {
       case (r, Cons(h, Nil)) => Some(r)
       case (_, Nil) => None
-      case (r, Cons(h, t)) => Cons(r, h)
+      case (r, Cons(h, t)) => _init(append(r, Cons(h, Nil)), t)
     }
-  }*/
-/*
-    l match {
-    case Nil => None
-    case Cons(h, Nil) =>
-  }*/
+    _init(Nil, l)
+  }
+
+  def foldRightShortCircuit[A, B](as: List[A], z: B)(f: (=> A, => B) => B): B = as match {
+    case Nil => z
+    case Cons(h, t) => f(h, foldRightShortCircuit(t, z)(f))
+  }
+
+  def product(ns: List[Double]) = {
+    def _product(x: => Double, y: => Double): Double = {
+      println("Called!")
+      if (x == 0) 0
+      else x * y
+    }
+    foldRightShortCircuit(ns, 1.0)(_product)
+  }
+
+  def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B = as match {
+    case Nil => z
+    case Cons(h, t) => f(h, foldRight(t, z)(f))
+  }
+
+  def length[A](as: List[A]): Int = foldRight(as, 0)((a, y) => y + 1)
+
+  @tailrec def foldLeft[A, B](as: List[A], z: B)(f: (A, B) => B): B = as match {
+    case Nil => z
+    case Cons(h, t) => foldLeft(t, f(h, z))(f)
+  }
+
+  def lengthViaFoldLeft[A](as: List[A]): Int = foldLeft(as, 0)((a, y) => y + 1)
+
+  def sumViaFoldLeft(as: List[Int]) = foldLeft(as, 0)(_ + _)
+  def productViaFoldLeft(as: List[Int]) = foldLeft(as, 1)(_ * _)
+
+  def reverse[A](as: List[A]): List[A] = foldLeft(as, Nil: List[A])((x, y) => Cons(x, y))
+
+  def foldRightViaFoldLeft[A, B](as: List[A], z: B)(f: (A, B) => B): B = foldLeft(reverse(as), z)(f)
 }
 
 sealed trait List[+A] {
