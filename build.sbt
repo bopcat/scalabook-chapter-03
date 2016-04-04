@@ -1,4 +1,4 @@
-name := "chapter2"
+name := "scalabook-chapter-03"
 
 version := "1.0"
 
